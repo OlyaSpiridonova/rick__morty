@@ -96,10 +96,11 @@ header h1 {
 }
 
 .nav__episodes a {
-    padding-bottom: 10px;
-    font-size: 20px;
+    position: relative;
+    top: 70px;
+    margin: 0 auto;
+    font-size: 25px;
     cursor: pointer;
-
 }
 
 .nav__episodes a:hover {

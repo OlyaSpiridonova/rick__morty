@@ -1,22 +1,20 @@
-import { getEpisode, getCharacter } from '../services/services';
-import {clearContainer, layoutCharacterSelector, layoutCharacterEpisode} from '../layouts/layouts';
+import { getCharacters, getCharacter } from '../services/services';
+import {layoutCharacterSelector, layoutCharacterEpisode} from '../layouts/layouts';
 
+async function showCharacter(characterId) {
 
-async function showCharacter(characterURL) {
-
-    const character = await getCharacter(characterURL);
-    const {image, name, species, gender, status, origin} = character;
+    const character = await getCharacter(characterId);
 
     const mainContainer = document.querySelector('.main__container');
-    clearContainer(mainContainer);
+    mainContainer.innerHTML = '';
+    mainContainer.insertAdjacentHTML('beforeend', layoutCharacterSelector(character));
+    const ulEpisode = document.querySelector('.character__episode');
 
-    mainContainer.insertAdjacentHTML('beforeend', layoutCharacterSelector(image, name, species, gender, status, origin.name));
-
-    for (let i = 0; i < character.episode.length; i++) {
-        const characterEpisode = await getEpisode(character.episode[i]);
-        const ulEpisode = document.querySelector('.character__episode');
-        ulEpisode.insertAdjacentHTML('beforeend', layoutCharacterEpisode(characterEpisode.name, characterEpisode.episode));
-    }
+    const characterEpisodes = character.episode;
+    const episodesData = await Promise.all(characterEpisodes.map(async (url) => getCharacters(url)));
+    episodesData.forEach(function (episodes) {
+        ulEpisode.insertAdjacentHTML('beforeend', layoutCharacterEpisode(episodes));
+    });    
 }
 
 export default showCharacter;

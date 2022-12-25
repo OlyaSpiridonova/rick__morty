@@ -21,11 +21,11 @@ async function getAllEpisodes() {
     return episodes;
 }
 
-async function getEpisode(url) {
-    const res = await fetch(url);
-    const episod = res.json();
-    console.log('episod', episod);
-    return episod;
+async function getEpisode(id) {
+    return await getData(`episode/${id}`);
+}
+async function getSeason(season) {
+    return await getData(`episode/?episode=${season}`);
 }
 
 async function getCharacters(url) {
@@ -34,11 +34,8 @@ async function getCharacters(url) {
     return characters;
 }
 
-async function getCharacter(url) {
-    const res = await fetch(url);
-    const character = res.json();
-    console.log('character', character);
-    return character;
+async function getCharacter(id) {
+    return await getData(`character/${id}`);
 }
 
-export { getAllEpisodes, getEpisode, getCharacters, getCharacter};
+export { getAllEpisodes, getEpisode, getSeason, getCharacters, getCharacter};

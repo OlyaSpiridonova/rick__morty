@@ -90,30 +90,56 @@
 /*!***********************************!*\
   !*** ./src/js/layouts/layouts.js ***!
   \***********************************/
-/*! exports provided: clearContainer, layoutCharacterSelector, layoutCharacterEpisode, layoutEpisodeSelector, layoutCharactersSelector */
+/*! exports provided: layoutCharacterSelector, layoutEpisodeTitle, layoutCharacterEpisode, layoutEpisodeSelector, layoutCharacterDescription */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearContainer", function() { return clearContainer; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layoutCharacterSelector", function() { return layoutCharacterSelector; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layoutEpisodeTitle", function() { return layoutEpisodeTitle; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layoutCharacterEpisode", function() { return layoutCharacterEpisode; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layoutEpisodeSelector", function() { return layoutEpisodeSelector; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layoutCharactersSelector", function() { return layoutCharactersSelector; });
-function clearContainer(selector) {
-  selector.querySelectorAll('*').forEach(n => n.remove());
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layoutCharacterDescription", function() { return layoutCharacterDescription; });
+function layoutEpisodeSelector(_ref) {
+  let {
+    id
+  } = _ref;
+  return `<a class="links__episode" episode-selector="${id}">Episode ${id}</a>`;
 }
-function layoutEpisodeSelector(episodeID) {
-  return `<a class="links__episode" episode-selector="${episodeID}">Episode ${episodeID}</a>`;
+function layoutEpisodeTitle(_ref2) {
+  let {
+    id,
+    name,
+    episode,
+    air_date
+  } = _ref2;
+  return `<h2> Episode ${id + " • " + name}</h2>
+            <p>${episode + " • " + air_date}</p>
+            <ul></ul>`;
 }
-function layoutCharactersSelector(image, name, species, status, characterID) {
-  return `<li class="links__ep" character-selector='${characterID}'>
+function layoutCharacterDescription(_ref3) {
+  let {
+    image,
+    name,
+    species,
+    status,
+    id
+  } = _ref3;
+  return `<li class="links__ep" character-selector='${id}'>
                     <img src=${image}>
                     <p id='name'>${name}</p>
                     <p id='name'>${species + " | " + status}</p>
                 </li>`;
 }
-function layoutCharacterSelector(image, name, species, gender, status, originName) {
+function layoutCharacterSelector(_ref4) {
+  let {
+    image,
+    name,
+    species,
+    gender,
+    status,
+    originName
+  } = _ref4;
   return `<div characterDescription-selector>
                     <img src=${image}>
                     <div class = "character_description">
@@ -124,7 +150,11 @@ function layoutCharacterSelector(image, name, species, gender, status, originNam
                 </div>
                 <ul class="character__episode"></ul>`;
 }
-function layoutCharacterEpisode(name, episode) {
+function layoutCharacterEpisode(_ref5) {
+  let {
+    name,
+    episode
+  } = _ref5;
   return `
             <li class='link__episode'>
                  <h3>${name}</h3>
@@ -144,9 +174,11 @@ function layoutCharacterEpisode(name, episode) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _modules_updateNav__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/updateNav */ "./src/js/modules/updateNav.js");
-/* harmony import */ var _modules_showEpisode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/showEpisode */ "./src/js/modules/showEpisode.js");
-/* harmony import */ var _modules_showCharacter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/showCharacter */ "./src/js/modules/showCharacter.js");
+/* harmony import */ var _modules_showSeasons__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/showSeasons */ "./src/js/modules/showSeasons.js");
+/* harmony import */ var _modules_updateNav__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/updateNav */ "./src/js/modules/updateNav.js");
+/* harmony import */ var _modules_showEpisode__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/showEpisode */ "./src/js/modules/showEpisode.js");
+/* harmony import */ var _modules_showCharacter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/showCharacter */ "./src/js/modules/showCharacter.js");
+
 
 
 
@@ -155,31 +187,33 @@ function handleClick(_ref) {
   let {
     target
   } = _ref;
+  handleIfSeasonSelector(target);
   handleIfEpisodeSelector(target);
   handleIfCharacterSelector(target);
 }
 function handleIfEpisodeSelector(target) {
-  console.log("target", target);
   if (!defineElementByAttribute(target, "episode-selector")) return;
   const episodeSelector = defineElementByAttribute(target, "episode-selector");
   const episodeID = episodeSelector.getAttribute("episode-selector");
-  Object(_modules_showEpisode__WEBPACK_IMPORTED_MODULE_1__["default"])(`https://rickandmortyapi.com/api/episode/${episodeID}`);
+  Object(_modules_showEpisode__WEBPACK_IMPORTED_MODULE_2__["default"])(`${episodeID}`);
+}
+function handleIfSeasonSelector(target) {
+  if (!defineElementByAttribute(target, "season-selector")) return;
+  const seasonSelector = defineElementByAttribute(target, "season-selector");
+  const seasonID = seasonSelector.getAttribute("season-selector");
+  Object(_modules_updateNav__WEBPACK_IMPORTED_MODULE_1__["default"])(`${seasonID}`);
 }
 function handleIfCharacterSelector(target) {
-  console.log("target", target);
   if (!defineElementByAttribute(target, "character-selector")) return;
   const characterSelector = defineElementByAttribute(target, "character-selector");
   const characterID = characterSelector.getAttribute("character-selector");
-  Object(_modules_showCharacter__WEBPACK_IMPORTED_MODULE_2__["default"])(`https://rickandmortyapi.com/api/character/${characterID}`);
+  Object(_modules_showCharacter__WEBPACK_IMPORTED_MODULE_3__["default"])(`${characterID}`);
 }
 function defineElementByAttribute(target, dataAttributeSelector) {
   const element = target.hasAttribute(dataAttributeSelector) ? target : target.closest(`[${dataAttributeSelector}]`) ? target.closest(`[${dataAttributeSelector}]`) : false;
-  console.log("target", target);
-  console.log("element", element);
-  console.log("dataAttributeSelector", dataAttributeSelector);
   return element;
 }
-Object(_modules_updateNav__WEBPACK_IMPORTED_MODULE_0__["default"])();
+Object(_modules_showSeasons__WEBPACK_IMPORTED_MODULE_0__["default"])();
 
 /***/ }),
 
@@ -196,24 +230,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _layouts_layouts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../layouts/layouts */ "./src/js/layouts/layouts.js");
 
 
-async function showCharacter(characterURL) {
-  const character = await Object(_services_services__WEBPACK_IMPORTED_MODULE_0__["getCharacter"])(characterURL);
-  const {
-    image,
-    name,
-    species,
-    gender,
-    status,
-    origin
-  } = character;
+async function showCharacter(characterId) {
+  const character = await Object(_services_services__WEBPACK_IMPORTED_MODULE_0__["getCharacter"])(characterId);
   const mainContainer = document.querySelector('.main__container');
-  Object(_layouts_layouts__WEBPACK_IMPORTED_MODULE_1__["clearContainer"])(mainContainer);
-  mainContainer.insertAdjacentHTML('beforeend', Object(_layouts_layouts__WEBPACK_IMPORTED_MODULE_1__["layoutCharacterSelector"])(image, name, species, gender, status, origin.name));
-  for (let i = 0; i < character.episode.length; i++) {
-    const characterEpisode = await Object(_services_services__WEBPACK_IMPORTED_MODULE_0__["getEpisode"])(character.episode[i]);
-    const ulEpisode = document.querySelector('.character__episode');
-    ulEpisode.insertAdjacentHTML('beforeend', Object(_layouts_layouts__WEBPACK_IMPORTED_MODULE_1__["layoutCharacterEpisode"])(characterEpisode.name, characterEpisode.episode));
-  }
+  mainContainer.innerHTML = '';
+  mainContainer.insertAdjacentHTML('beforeend', Object(_layouts_layouts__WEBPACK_IMPORTED_MODULE_1__["layoutCharacterSelector"])(character));
+  const ulEpisode = document.querySelector('.character__episode');
+  const characterEpisodes = character.episode;
+  const episodesData = await Promise.all(characterEpisodes.map(async url => Object(_services_services__WEBPACK_IMPORTED_MODULE_0__["getCharacters"])(url)));
+  episodesData.forEach(function (episodes) {
+    ulEpisode.insertAdjacentHTML('beforeend', Object(_layouts_layouts__WEBPACK_IMPORTED_MODULE_1__["layoutCharacterEpisode"])(episodes));
+  });
 }
 /* harmony default export */ __webpack_exports__["default"] = (showCharacter);
 
@@ -235,23 +262,39 @@ __webpack_require__.r(__webpack_exports__);
 async function showEpisode(episod) {
   const respData = await Object(_services_services__WEBPACK_IMPORTED_MODULE_0__["getEpisode"])(episod);
   const mainContainer = document.querySelector('.main__container');
-  const {
-    id,
-    name,
-    episode,
-    air_date
-  } = respData;
-  mainContainer.innerHTML = `
-        <h2> Episode ${id + " • " + name}</h2>
-        <p>${episode + " • " + air_date}</p>
-        <ul></ul>`;
+  mainContainer.innerHTML = '';
+  mainContainer.insertAdjacentHTML('beforeend', Object(_layouts_layouts__WEBPACK_IMPORTED_MODULE_1__["layoutEpisodeTitle"])(respData));
   const mainContainerUl = document.querySelector(".main__container ul");
-  for (let i = 0; i < respData.characters.length; i++) {
-    const character = await Object(_services_services__WEBPACK_IMPORTED_MODULE_0__["getCharacters"])(respData.characters[i]);
-    mainContainerUl.insertAdjacentHTML('beforeend', Object(_layouts_layouts__WEBPACK_IMPORTED_MODULE_1__["layoutCharactersSelector"])(character.image, character.name, character.species, character.status, character.id));
-  }
+  const characters = respData.characters;
+  const CharactersData = await Promise.all(characters.map(async url => Object(_services_services__WEBPACK_IMPORTED_MODULE_0__["getCharacters"])(url)));
+  CharactersData.forEach(function (character) {
+    mainContainerUl.insertAdjacentHTML('beforeend', Object(_layouts_layouts__WEBPACK_IMPORTED_MODULE_1__["layoutCharacterDescription"])(character));
+  });
 }
 /* harmony default export */ __webpack_exports__["default"] = (showEpisode);
+
+/***/ }),
+
+/***/ "./src/js/modules/showSeasons.js":
+/*!***************************************!*\
+  !*** ./src/js/modules/showSeasons.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function showSeasons() {
+  const navEpisodes = document.querySelector('.nav__episodes');
+  navEpisodes.innerHTML = `
+                <a class="nav__seasons" season-selector='s01'>Season 1</a>
+                <a class="nav__seasons" season-selector='s02'>Season 2</a>
+                <a class="nav__seasons" season-selector='s03'>Season 3</a>
+                <a class="nav__seasons" season-selector='s04'>Season 4</a>
+                <a class="nav__seasons" season-selector='s05'>Season 5</a>
+    `;
+}
+/* harmony default export */ __webpack_exports__["default"] = (showSeasons);
 
 /***/ }),
 
@@ -264,17 +307,23 @@ async function showEpisode(episod) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _services_services__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/services */ "./src/js/services/services.js");
-/* harmony import */ var _layouts_layouts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../layouts/layouts */ "./src/js/layouts/layouts.js");
+/* harmony import */ var _showSeasons__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./showSeasons */ "./src/js/modules/showSeasons.js");
+/* harmony import */ var _services_services__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/services */ "./src/js/services/services.js");
+/* harmony import */ var _layouts_layouts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../layouts/layouts */ "./src/js/layouts/layouts.js");
 
 
-async function updateNav() {
-  const allEpisode = await Object(_services_services__WEBPACK_IMPORTED_MODULE_0__["getAllEpisodes"])();
+
+async function updateNav(season) {
   const navEpisodes = document.querySelector('.nav__episodes');
-  let key;
-  for (key in allEpisode) {
-    navEpisodes.insertAdjacentHTML('beforeend', Object(_layouts_layouts__WEBPACK_IMPORTED_MODULE_1__["layoutEpisodeSelector"])(allEpisode[key].id));
-  }
+  const seasons = await Object(_services_services__WEBPACK_IMPORTED_MODULE_1__["getSeason"])(season);
+  navEpisodes.innerHTML = '<a class="nav__return" return-selector>Вернуться</a>';
+  const returnSeasons = document.querySelector('[return-selector]');
+  returnSeasons.addEventListener('click', () => {
+    Object(_showSeasons__WEBPACK_IMPORTED_MODULE_0__["default"])();
+  });
+  seasons.results.forEach(function (season) {
+    navEpisodes.insertAdjacentHTML('beforeend', Object(_layouts_layouts__WEBPACK_IMPORTED_MODULE_2__["layoutEpisodeSelector"])(season));
+  });
 }
 /* harmony default export */ __webpack_exports__["default"] = (updateNav);
 
@@ -284,13 +333,14 @@ async function updateNav() {
 /*!*************************************!*\
   !*** ./src/js/services/services.js ***!
   \*************************************/
-/*! exports provided: getAllEpisodes, getEpisode, getCharacters, getCharacter */
+/*! exports provided: getAllEpisodes, getEpisode, getSeason, getCharacters, getCharacter */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllEpisodes", function() { return getAllEpisodes; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getEpisode", function() { return getEpisode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSeason", function() { return getSeason; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCharacters", function() { return getCharacters; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCharacter", function() { return getCharacter; });
 const apiSrc = "https://rickandmortyapi.com/api/";
@@ -314,22 +364,19 @@ async function getAllEpisodes() {
   console.log("allEpisodes", episodes);
   return episodes;
 }
-async function getEpisode(url) {
-  const res = await fetch(url);
-  const episod = res.json();
-  console.log('episod', episod);
-  return episod;
+async function getEpisode(id) {
+  return await getData(`episode/${id}`);
+}
+async function getSeason(season) {
+  return await getData(`episode/?episode=${season}`);
 }
 async function getCharacters(url) {
   const res = await fetch(url);
   const characters = res.json();
   return characters;
 }
-async function getCharacter(url) {
-  const res = await fetch(url);
-  const character = res.json();
-  console.log('character', character);
-  return character;
+async function getCharacter(id) {
+  return await getData(`character/${id}`);
 }
 
 
