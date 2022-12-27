@@ -15,25 +15,33 @@ function layoutCharacterDescription({ image, name, species, status, id }) {
                 </li>`;
 }
 
-function layoutCharacterSelector({ image, name, species, gender, status, originName }) {
+function layoutCharacterSelector({ image, name, species, gender, status, origin }) {
     return `<div characterDescription-selector>
                     <img src=${image}>
                     <div class = "character_description">
                         <h2>${name}</h2>
                         <p class='character_name'>${species + " | " + gender + " | " + status}</p>
-                        <p class='location'>${"Origin: " + originName}</p>
+                        <p location-selector="${origin.name}" class='location'>${"Origin: " + origin.name}</p>
                     </div>
                 </div>
                 <ul class="character__episode"></ul>`;
 }
 
-function layoutCharacterEpisode({ name, episode }) {
+function layoutCharacterEpisode({ id, name, episode }) {
     return `
-            <li class='link__episode'>
+            <li episode-selector="${id}" class='link__episode'>
                  <h3>${name}</h3>
                  <p>${episode}</p>
             </li>`;
 }
 
+function layoutLocation({name}) {
+    return `
+            <h1>${name}</h1>
+            <h2>Residents</h2>
+            <ul></ul>
+    `;
+}
 
-export { layoutCharacterSelector, layoutEpisodeTitle, layoutCharacterEpisode, layoutEpisodeSelector, layoutCharacterDescription };
+
+export { layoutCharacterSelector, layoutEpisodeTitle, layoutCharacterEpisode, layoutEpisodeSelector, layoutCharacterDescription, layoutLocation};

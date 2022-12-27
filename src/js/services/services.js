@@ -38,4 +38,7 @@ async function getCharacter(id) {
     return await getData(`character/${id}`);
 }
 
-export { getAllEpisodes, getEpisode, getSeason, getCharacters, getCharacter};
+async function getLocation(name) {
+    return await getData(`location/?name=${name}`);
+}
+export { getAllEpisodes, getEpisode, getSeason, getCharacters, getCharacter, getLocation};

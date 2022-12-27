@@ -90,7 +90,7 @@
 /*!***********************************!*\
   !*** ./src/js/layouts/layouts.js ***!
   \***********************************/
-/*! exports provided: layoutCharacterSelector, layoutEpisodeTitle, layoutCharacterEpisode, layoutEpisodeSelector, layoutCharacterDescription */
+/*! exports provided: layoutCharacterSelector, layoutEpisodeTitle, layoutCharacterEpisode, layoutEpisodeSelector, layoutCharacterDescription, layoutLocation */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -100,6 +100,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layoutCharacterEpisode", function() { return layoutCharacterEpisode; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layoutEpisodeSelector", function() { return layoutEpisodeSelector; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layoutCharacterDescription", function() { return layoutCharacterDescription; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layoutLocation", function() { return layoutLocation; });
 function layoutEpisodeSelector(_ref) {
   let {
     id
@@ -138,28 +139,39 @@ function layoutCharacterSelector(_ref4) {
     species,
     gender,
     status,
-    originName
+    origin
   } = _ref4;
   return `<div characterDescription-selector>
                     <img src=${image}>
                     <div class = "character_description">
                         <h2>${name}</h2>
                         <p class='character_name'>${species + " | " + gender + " | " + status}</p>
-                        <p class='location'>${"Origin: " + originName}</p>
+                        <p location-selector="${origin.name}" class='location'>${"Origin: " + origin.name}</p>
                     </div>
                 </div>
                 <ul class="character__episode"></ul>`;
 }
 function layoutCharacterEpisode(_ref5) {
   let {
+    id,
     name,
     episode
   } = _ref5;
   return `
-            <li class='link__episode'>
+            <li episode-selector="${id}" class='link__episode'>
                  <h3>${name}</h3>
                  <p>${episode}</p>
             </li>`;
+}
+function layoutLocation(_ref6) {
+  let {
+    name
+  } = _ref6;
+  return `
+            <h1>${name}</h1>
+            <h2>Residents</h2>
+            <ul></ul>
+    `;
 }
 
 
@@ -178,6 +190,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_updateNav__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/updateNav */ "./src/js/modules/updateNav.js");
 /* harmony import */ var _modules_showEpisode__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/showEpisode */ "./src/js/modules/showEpisode.js");
 /* harmony import */ var _modules_showCharacter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/showCharacter */ "./src/js/modules/showCharacter.js");
+/* harmony import */ var _modules_showLocation__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/showLocation */ "./src/js/modules/showLocation.js");
+
 
 
 
@@ -190,6 +204,7 @@ function handleClick(_ref) {
   handleIfSeasonSelector(target);
   handleIfEpisodeSelector(target);
   handleIfCharacterSelector(target);
+  handleLocationSelector(target);
 }
 function handleIfEpisodeSelector(target) {
   if (!defineElementByAttribute(target, "episode-selector")) return;
@@ -208,6 +223,13 @@ function handleIfCharacterSelector(target) {
   const characterSelector = defineElementByAttribute(target, "character-selector");
   const characterID = characterSelector.getAttribute("character-selector");
   Object(_modules_showCharacter__WEBPACK_IMPORTED_MODULE_3__["default"])(`${characterID}`);
+}
+function handleLocationSelector(target) {
+  if (!defineElementByAttribute(target, 'location-selector')) return;
+  const locationSelector = defineElementByAttribute(target, "location-selector");
+  const nameLocation = locationSelector.getAttribute("location-selector");
+  console.log(`${nameLocation}`);
+  Object(_modules_showLocation__WEBPACK_IMPORTED_MODULE_4__["default"])(`${nameLocation}`);
 }
 function defineElementByAttribute(target, dataAttributeSelector) {
   const element = target.hasAttribute(dataAttributeSelector) ? target : target.closest(`[${dataAttributeSelector}]`) ? target.closest(`[${dataAttributeSelector}]`) : false;
@@ -275,6 +297,36 @@ async function showEpisode(episod) {
 
 /***/ }),
 
+/***/ "./src/js/modules/showLocation.js":
+/*!****************************************!*\
+  !*** ./src/js/modules/showLocation.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_services__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/services */ "./src/js/services/services.js");
+/* harmony import */ var _layouts_layouts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../layouts/layouts */ "./src/js/layouts/layouts.js");
+
+
+async function showLocation(name) {
+  const location = await Object(_services_services__WEBPACK_IMPORTED_MODULE_0__["getLocation"])(name);
+  const locationData = location.results[0];
+  console.log(locationData);
+  const mainContainer = document.querySelector('.main__container');
+  mainContainer.innerHTML = '';
+  mainContainer.insertAdjacentHTML('beforeend', Object(_layouts_layouts__WEBPACK_IMPORTED_MODULE_1__["layoutLocation"])(locationData));
+  const mainContainerUl = document.querySelector(".main__container ul");
+  const CharactersData = await Promise.all(locationData.residents.map(async url => Object(_services_services__WEBPACK_IMPORTED_MODULE_0__["getCharacters"])(url)));
+  CharactersData.forEach(function (character) {
+    mainContainerUl.insertAdjacentHTML('beforeend', Object(_layouts_layouts__WEBPACK_IMPORTED_MODULE_1__["layoutCharacterDescription"])(character));
+  });
+}
+/* harmony default export */ __webpack_exports__["default"] = (showLocation);
+
+/***/ }),
+
 /***/ "./src/js/modules/showSeasons.js":
 /*!***************************************!*\
   !*** ./src/js/modules/showSeasons.js ***!
@@ -333,7 +385,7 @@ async function updateNav(season) {
 /*!*************************************!*\
   !*** ./src/js/services/services.js ***!
   \*************************************/
-/*! exports provided: getAllEpisodes, getEpisode, getSeason, getCharacters, getCharacter */
+/*! exports provided: getAllEpisodes, getEpisode, getSeason, getCharacters, getCharacter, getLocation */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -343,6 +395,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSeason", function() { return getSeason; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCharacters", function() { return getCharacters; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCharacter", function() { return getCharacter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLocation", function() { return getLocation; });
 const apiSrc = "https://rickandmortyapi.com/api/";
 async function getData(url) {
   const res = await fetch(`${apiSrc}${url}`);
@@ -377,6 +430,9 @@ async function getCharacters(url) {
 }
 async function getCharacter(id) {
   return await getData(`character/${id}`);
+}
+async function getLocation(name) {
+  return await getData(`location/?name=${name}`);
 }
 
 

@@ -2,12 +2,15 @@ import showSeasons from './modules/showSeasons';
 import updateNav from './modules/updateNav';
 import showEpisode from './modules/showEpisode';
 import showCharacter from './modules/showCharacter';
+import showLocation from './modules/showLocation';
+
 
 document.addEventListener("click", handleClick);
 function handleClick({ target }) {
     handleIfSeasonSelector(target);
     handleIfEpisodeSelector(target);
     handleIfCharacterSelector(target);
+    handleLocationSelector(target);
 }
 function handleIfEpisodeSelector(target) {
     if (!defineElementByAttribute(target, "episode-selector")) return;
@@ -28,6 +31,14 @@ function handleIfCharacterSelector(target) {
     const characterSelector = defineElementByAttribute(target, "character-selector");
     const characterID = characterSelector.getAttribute("character-selector");
     showCharacter(`${characterID}`);
+}
+
+function handleLocationSelector(target) {
+    if (!defineElementByAttribute(target, 'location-selector')) return;
+    const locationSelector = defineElementByAttribute(target, "location-selector");
+    const nameLocation = locationSelector.getAttribute("location-selector");
+    console.log(`${nameLocation}`);
+    showLocation(`${nameLocation}`);
 }
 
 function defineElementByAttribute(target, dataAttributeSelector) {
