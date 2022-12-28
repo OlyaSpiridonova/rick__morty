@@ -42,6 +42,4 @@ function layoutLocation({name}) {
             <ul></ul>
     `;
 }
-
-
 export { layoutCharacterSelector, layoutEpisodeTitle, layoutCharacterEpisode, layoutEpisodeSelector, layoutCharacterDescription, layoutLocation};

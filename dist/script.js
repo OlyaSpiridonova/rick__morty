@@ -191,6 +191,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_showEpisode__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/showEpisode */ "./src/js/modules/showEpisode.js");
 /* harmony import */ var _modules_showCharacter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/showCharacter */ "./src/js/modules/showCharacter.js");
 /* harmony import */ var _modules_showLocation__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/showLocation */ "./src/js/modules/showLocation.js");
+/* harmony import */ var _modules_searchPanel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/searchPanel */ "./src/js/modules/searchPanel.js");
+
 
 
 
@@ -236,6 +238,35 @@ function defineElementByAttribute(target, dataAttributeSelector) {
   return element;
 }
 Object(_modules_showSeasons__WEBPACK_IMPORTED_MODULE_0__["default"])();
+Object(_modules_searchPanel__WEBPACK_IMPORTED_MODULE_5__["default"])();
+
+/***/ }),
+
+/***/ "./src/js/modules/searchPanel.js":
+/*!***************************************!*\
+  !*** ./src/js/modules/searchPanel.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_services__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/services */ "./src/js/services/services.js");
+/* harmony import */ var _modules_showEpisode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../modules/showEpisode */ "./src/js/modules/showEpisode.js");
+
+
+function searchPanel() {
+  const search = document.querySelector('form');
+  search.addEventListener('submit', async e => {
+    e.preventDefault();
+    let input = document.querySelector('input');
+    const searchData = await Object(_services_services__WEBPACK_IMPORTED_MODULE_0__["getSearch"])(`${input.value}`);
+    let episodeId = searchData.results.map(item => item.id);
+    Object(_modules_showEpisode__WEBPACK_IMPORTED_MODULE_1__["default"])(episodeId);
+    input.value = '';
+  });
+}
+/* harmony default export */ __webpack_exports__["default"] = (searchPanel);
 
 /***/ }),
 
@@ -385,7 +416,7 @@ async function updateNav(season) {
 /*!*************************************!*\
   !*** ./src/js/services/services.js ***!
   \*************************************/
-/*! exports provided: getAllEpisodes, getEpisode, getSeason, getCharacters, getCharacter, getLocation */
+/*! exports provided: getAllEpisodes, getEpisode, getSeason, getCharacters, getCharacter, getLocation, getSearch */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -396,6 +427,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCharacters", function() { return getCharacters; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCharacter", function() { return getCharacter; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLocation", function() { return getLocation; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSearch", function() { return getSearch; });
 const apiSrc = "https://rickandmortyapi.com/api/";
 async function getData(url) {
   const res = await fetch(`${apiSrc}${url}`);
@@ -433,6 +465,9 @@ async function getCharacter(id) {
 }
 async function getLocation(name) {
   return await getData(`location/?name=${name}`);
+}
+async function getSearch(name) {
+  return await getData(`episode/?name=${name}`);
 }
 
 

@@ -50,6 +50,11 @@
     cursor: pointer;
 }
 
+.search__input {
+    width: 200px;
+    height: 15px;
+}
+
 .main__information {
     display: grid;
     grid-template-columns: 200px 1000px;

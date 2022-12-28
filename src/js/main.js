@@ -3,7 +3,7 @@ import updateNav from './modules/updateNav';
 import showEpisode from './modules/showEpisode';
 import showCharacter from './modules/showCharacter';
 import showLocation from './modules/showLocation';
-
+import searchPanel from './modules/searchPanel';
 
 document.addEventListener("click", handleClick);
 function handleClick({ target }) {
@@ -51,6 +51,7 @@ function defineElementByAttribute(target, dataAttributeSelector) {
 }
 
 showSeasons();
+searchPanel();
 
 
 

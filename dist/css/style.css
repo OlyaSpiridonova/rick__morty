@@ -43,6 +43,11 @@
 
 }
 
+.search__input {
+    width: 220px;
+    height: 35px;
+}
+
 .search__btn {
     width: 50px;
     height: 35px;
