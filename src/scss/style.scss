@@ -1,0 +1,206 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: #b0e0e6;
+}
+
+.container {
+  padding: 35px 10px;
+  margin: 0 auto;
+  max-width: 1120px;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  align-items: center;
+  justify-content: space-between;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  column-gap: 150px;
+}
+
+.wrapper__item {
+  display: grid;
+}
+
+.title_main {
+  padding-bottom: 20px;
+  font-size: 30px;
+}
+
+.main__container .descr_main {
+  font-size: 21px;
+  width: 400px;
+}
+
+.img_main {
+  width: 90%;
+}
+
+.search {
+  width: 200px;
+  height: 35px;
+}
+
+.search__btn {
+  width: 50px;
+  height: 35px;
+  background-color: #fff;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.search__input {
+  width: 200px;
+  height: 35px;
+  border-radius: 15px;
+}
+
+.main__information {
+  display: grid;
+  grid-template-columns: minmax(auto, 200px) minmax(auto, 1000px);
+  margin: 0 auto;
+  max-width: 1200px;
+  padding-top: 50px;
+}
+
+.container__left {
+  width: 150px;
+}
+
+header h1 {
+  display: flex;
+  justify-content: center;
+  padding-top: 30px;
+  padding-bottom: 50px;
+}
+
+.logo img {
+  width: 170px;
+  position: relative;
+}
+
+.nav__episodes {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: repeat(10, auto);
+  row-gap: 15px;
+  height: 500px;
+  overflow: auto;
+}
+
+.nav__episodes a {
+  position: relative;
+  top: 70px;
+  margin: 0 auto;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.nav__episodes a:hover {
+  color: rgb(6, 2, 47);
+  text-decoration: underline;
+}
+
+.nav__episodes .links__episode {
+  font-size: 30px;
+}
+
+.main__container {
+  max-width: 1000px;
+  height: 610px;
+  overflow: auto;
+}
+
+.main__container ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 315px);
+  column-gap: 20px;
+  row-gap: 20px;
+  grid-template-rows: auto;
+  padding-top: 10px;
+}
+
+.main__container .link__episode {
+  border: 1px solid;
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid rgb(53, 154, 216);
+  }
+}
+
+.main__container h2 {
+  position: relative;
+  font-size: 40px;
+  padding-left: 7px;
+}
+
+.main__container p {
+  font-size: 25px;
+  padding-left: 7px;
+}
+
+.main__container li {
+  list-style-type: none;
+}
+
+.links__ep {
+  display: grid;
+  justify-items: center;
+  cursor: pointer;
+}
+
+.main__container .name {
+  text-align: center;
+  padding-top: 5px;
+  font-size: 20px;
+}
+
+.character {
+  display: grid;
+  grid-template-columns: 300px 300px;
+  padding-bottom: 50px;
+  column-gap: 20px;
+}
+
+.character_description {
+  display: grid;
+  align-content: flex-end;
+}
+
+.main__container .character__episode {
+  display: grid;
+  grid-template-columns: repeat(4, 200px);
+  text-align: center;
+}
+
+.location {
+  background-color: aliceblue;
+  width: 230px;
+  border: 1px solid;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #1f79b6;
+  }
+}
+
+.listSeries {
+  cursor: pointer;
+  border: 1px solid;
+}
+
+.residents {
+  position: relative;
+  font-size: 30px;
+  left: 40%;
+  padding-bottom: 20px;
+}

@@ -1,95 +1,53 @@
-"use strict";
+//Основной модуль
+import gulp from 'gulp';
+//Импорт путей
+import { path } from './gulp/config/path.js';
 
-const gulp = require("gulp");
-const webpack = require("webpack-stream");
-const browsersync = require("browser-sync");
+//Импорт общих плагинов
+import { plugins } from './gulp/config/plugins.js';
 
-const dist = "./dist/";
+//Передаем значения в глобальную переменную
+global.app = {
+  isBuild: process.argv.includes('--build'),
+  isDev: !process.argv.includes('--build'),
+  path: path,
+  gulp: gulp,
+  plugins: plugins,
+};
 
-gulp.task("copy-html", () => {
-    return gulp.src("./src/index.html")
-                .pipe(gulp.dest(dist))
-                .pipe(browsersync.stream());
-});
+//Импорт задач
+import { copy } from './gulp/tasks/copy.js';
+import { reset } from './gulp/tasks/reset.js';
+import { html } from './gulp/tasks/html.js';
+import { server } from './gulp/tasks/server.js';
+import { scss } from './gulp/tasks/scss.js';
+import { js } from './gulp/tasks/js.js';
+import { images } from './gulp/tasks/images.js';
+import { otftoTtf, ttfToWoff, fontStyle } from './gulp/tasks/fonts.js';
+import { svgSprive } from './gulp/tasks/svgSprive.js';
 
-gulp.task("build-js", () => {
-    return gulp.src("./src/js/main.js")
-                .pipe(webpack({
-                    mode: 'development',
-                    output: {
-                        filename: 'script.js'
-                    },
-                    watch: false,
-                    devtool: "source-map",
-                    module: {
-                        rules: [
-                          {
-                            test: /\.m?js$/,
-                            exclude: /(node_modules|bower_components)/,
-                            use: {
-                              loader: 'babel-loader',
-                              options: {
-                                presets: [['@babel/preset-env', {
-                                    debug: true,
-                                    corejs: 3,
-                                    useBuiltIns: "usage"
-                                }]]
-                              }
-                            }
-                          }
-                        ]
-                      }
-                }))
-                .pipe(gulp.dest(dist))
-                .on("end", browsersync.reload);
-});
+//Наблюдатель за изменениями в файлах
+function watcher() {
+  gulp.watch(path.watch.files, copy);
+  gulp.watch(path.watch.html, html);
+  gulp.watch(path.watch.scss, scss);
+  gulp.watch(path.watch.js, js);
+  gulp.watch(path.watch.images, images);
+}
 
-gulp.task("copy-assets", () => {
-    return gulp.src("./src/assets/**/*.*")
-                .pipe(gulp.dest(dist + "/assets"))
-                .on("end", browsersync.reload);
-});
+export { svgSprive };
 
-gulp.task("watch", () => {
-    browsersync.init({
-		server: "./dist/",
-		port: 4000,
-		notify: true
-    });
-    
-    gulp.watch("./src/index.html", gulp.parallel("copy-html"));
-    gulp.watch("./src/assets/**/*.*", gulp.parallel("copy-assets"));
-    gulp.watch("./src/js/**/*.js", gulp.parallel("build-js"));
-});
+//Последовательная обработка шрифтов
+const fonts = gulp.series(otftoTtf, ttfToWoff, fontStyle);
 
-gulp.task("build", gulp.parallel("copy-html", "copy-assets", "build-js"));
+//Основные задачи
+const mainTasks = gulp.series(
+  fonts,
+  gulp.parallel(copy, html, scss, js, images)
+);
 
-gulp.task("build-prod-js", () => {
-    return gulp.src("./src/js/main.js")
-                .pipe(webpack({
-                    mode: 'production',
-                    output: {
-                        filename: 'script.js'
-                    },
-                    module: {
-                        rules: [
-                          {
-                            test: /\.m?js$/,
-                            exclude: /(node_modules|bower_components)/,
-                            use: {
-                              loader: 'babel-loader',
-                              options: {
-                                presets: [['@babel/preset-env', {
-                                    corejs: 3,
-                                    useBuiltIns: "usage"
-                                }]]
-                              }
-                            }
-                          }
-                        ]
-                      }
-                }))
-                .pipe(gulp.dest(dist));
-});
+//Построение сценариев выполнения задач
+const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server));
 
-gulp.task("default", gulp.parallel("watch", "build"));
+//Выполнение сценария по умолчанию
+gulp.task('default', dev);

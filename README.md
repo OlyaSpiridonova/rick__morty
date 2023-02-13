@@ -1,4 +1,6 @@
 Test task ecocomputers, author Olga Spiridonova
 
-In the project directory to instal the project run:
-npm i
+## Для работы используйте такие комманды
+
+- Для установки всех зависимостей: `$ npm install`;
+- Для запуска сборщика Gulp нужно использовать: `$ npm run dev`;
