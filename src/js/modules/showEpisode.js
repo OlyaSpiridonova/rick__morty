@@ -27,5 +27,3 @@ async function showEpisode(episod) {
 }
 
 export default showEpisode;
-
-export default showEpisode;

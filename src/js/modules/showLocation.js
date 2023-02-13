@@ -27,5 +27,3 @@ async function showLocation(name) {
 }
 
 export default showLocation;
-
-export default showLocation;

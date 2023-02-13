@@ -25,5 +25,3 @@ async function showCharacter(characterId) {
 }
 
 export default showCharacter;
-
-export default showCharacter;

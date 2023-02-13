@@ -14,5 +14,3 @@ function searchPanel() {
 }
 
 export default searchPanel;
-
-export default searchPanel;

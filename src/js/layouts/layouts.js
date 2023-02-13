@@ -61,19 +61,3 @@ export {
   layoutCharacterDescription,
   layoutLocation,
 };
-
-function layoutLocation({ name }) {
-  return `
-            <h1>${name}</h1>
-            <h2>Residents</h2>
-            <ul></ul>
-    `;
-}
-export {
-  layoutCharacterSelector,
-  layoutEpisodeTitle,
-  layoutCharacterEpisode,
-  layoutEpisodeSelector,
-  layoutCharacterDescription,
-  layoutLocation,
-};
